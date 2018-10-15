@@ -1,0 +1,156 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+{{ super() }}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src='static/Chart.min.js'></script>
+    <link href="/static/chart8.css?q=1280549780" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,700' rel='stylesheet' type='text/css'>
+    <link href="{{url_for('static', filename='font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript">
+      // Load the Visualization API and the ColumnChart package.
+      google.charts.load('current', {packages: ['corechart','controls']}); 
+      
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+      
+      // Callback that creates and populates a data table, 
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create our data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'School');
+        data.addColumn('number', 'Number of students');
+        data.addRows([
+                {% for row,rown in data%}
+                ['{{row}}', {{rown}}],
+                {%- endfor %}
+        ]);
+
+        var data2 = new google.visualization.DataTable();
+        data2.addColumn('string', 'District');
+        data2.addColumn('number', 'Community Unit');
+        data2.addRows([
+                {% for row2,rown2 in data2%}
+                ['{{row2}}', {{rown2}}],
+                {%- endfor %}
+        ]);
+
+        var controlStr = new google.visualization.ControlWrapper({
+          'controlType': 'StringFilter',
+          'containerId': 'string_div',
+          'options': {
+            'matchType':'any',
+            'filterColumnIndex':0
+          }
+        });
+        var controlStr2 = new google.visualization.ControlWrapper({
+          'controlType': 'StringFilter',
+          'containerId': 'string_div2',
+          'options': {
+            'matchType':'any',
+            'filterColumnIndex':0
+          }
+        });
+
+        var dashboard = new google.visualization.Dashboard(
+            document.getElementById('dashboard_div'));
+        var dashboard2 = new google.visualization.Dashboard(
+            document.getElementById('dashboard_div2'));
+
+
+        var options = {
+          isStacked: true,
+          height: 400,
+          width: 1000
+        };
+
+        var options2 = {
+          height: 400,
+          width: 1000,
+          colors:["#FF8C00"]
+        };
+
+        var chart = new google.visualization.ChartWrapper(
+            {
+          'chartType': 'ColumnChart',
+          'containerId': 'chart_div',
+          'options': {
+            'width': 1200,
+            'height': 300
+          }
+        });
+
+        var chart2 = new google.visualization.ChartWrapper(
+            {
+          'chartType': 'ColumnChart',
+          'containerId': 'chart_div2',
+          'options': {
+            'width': 1200,
+            'height': 300,
+            'colors':["#FF8C00"]
+          }
+        });
+
+        dashboard.bind(controlStr, [chart]);
+        dashboard2.bind(controlStr2, [chart2]);
+
+        // Draw the dashboard.
+        dashboard.draw(data);
+        dashboard2.draw(data2);
+
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        var chart2 = new google.visualization.ColumnChart(document.getElementById('chart_div2'));
+        
+        chart.draw(data, options);
+        chart2.draw(data2, options2);
+
+      }
+</script>
+{% endblock %}
+{% block content %}
+    <header>
+    <div class="container clearfix">
+        <div class="panel-heading"><h1>School Information Dashboard</h1>
+      </div>
+    </div>
+</header>
+<div class="row">
+  <div class="column">
+    <div class="card"><h4 style="font-family:verdana;">School with highest Number of students: </h4><h3 style="color:green;">Lubiri Secondary school</h3> </div>
+  </div>
+  <div class="column">
+    <div class="card"><h4 style="font-family:verdana;">District with Largest Number of schools: </h4><h3 style="color:green;">Kamuli</h3></div>
+  </div>
+  <div class="column">
+    <div class="card"><h4 style="font-family:verdana;">District with lowest Number of schools: </h4><h3 style="color:green;">Arua</h3></div>
+  </div>
+  <div class="column">
+    <div class="card"><h3 style="color:green;">700</h3><h4 style="font-family:verdana;"> is the Largest Number of students in 1 school</h4></div>
+  </div>
+</div>
+        <div class="widget">
+    <div>
+        <h1>Chart visualizing School size based on student numbers</h1><div id="string_div"></div>
+    </div>
+<div id="dashboard_div">
+<div id="chart_div"></div>
+</div>
+</div>
+<div class="widget">
+    <div>
+        <h1>Chart showing Communities with Most Partner Schools </h1><div class="control" id="string_div2"></div>
+
+    </div>
+<div id="dashboard_div2">
+<div id="chart_div2"></div>
+</div>
+</div>
+
+{% endblock %}
