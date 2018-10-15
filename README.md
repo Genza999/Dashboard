@@ -2,7 +2,7 @@
 
 Assignment to visualize two Charts using data from a csv file as input.
 
-## Website URL:
+## URL:
 
 https://assignment101.herokuapp.com/
 
@@ -12,7 +12,7 @@ https://assignment101.herokuapp.com/
 * MongoDb
 * Html
 * css
-* Virtual environment
+* Heroku
 
 ### Use the command below to build a perfect replica of the virtual environment:
 
@@ -20,7 +20,7 @@ https://assignment101.herokuapp.com/
 pip install -r requirements.txt
 ```
 
-### After run the following command to start the web application(Make sure your Mongodb is already up):
+### After run the following command to start the web application(Make sure your Mongodb is already up and running):
 
 ```
 python app.py runserver
